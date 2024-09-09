@@ -1,7 +1,7 @@
 # [Azure SignalR AI Streaming with Azure OpenAI]
 
-[![Open in GitHub Codespaces](https://github.com/codespaces/badge.svg)](placeholder)
-[![Open in Dev Containers](https://img.shields.io/static/v1?style=for-the-badge&label=Dev%20Containers&message=Open&color=blue&logo=visualstudiocode)](placeholder)
+[![Open in GitHub Codespaces](https://github.com/codespaces/badge.svg)](https://codespaces.new/Azure-Samples/signalr-ai-streaming)
+[![Open in Dev Containers](https://img.shields.io/static/v1?style=for-the-badge&label=Dev%20Containers&message=Open&color=blue&logo=visualstudiocode)](https://vscode.dev/redirect?url=vscode://ms-vscode-remote.remote-containers/cloneInVolume?url=https://github.com/Azure-Samples/signalr-ai-streaming)
 
 In the current landscape of digital communication, AI-powered chatbots and streaming technology have become increasingly popular. This project aims to combine these two trends into a seamless group chat application by leveraging SignalR for real-time communication and integrating Azure OpenAI. This project demonstrates SignalR group chats and Azure OpenAI integration.
 
@@ -29,7 +29,7 @@ This project provides the following features:
 
 You have a few options for getting started with this template. The quickest way to get started is [GitHub Codespaces](#github-codespaces), since it will setup all the tools for you, but you can also [set it up locally](#local-environment). You can also use a [VS Code dev container](#vs-code-dev-containers)
 
-This template uses `gpt-35-turbo` which may not be available in all Azure regions. Check for [up-to-date region availability](https://learn.microsoft.com/azure/ai-services/openai/concepts/models#standard-deployment-model-availability) and select a region during deployment accordingly
+This template uses `gpt-4o` which may not be available in all Azure regions. Check for [up-to-date region availability](https://learn.microsoft.com/azure/ai-services/openai/concepts/models#standard-deployment-model-availability) and select a region during deployment accordingly
 
   * We recommend using [East US]
 
@@ -38,124 +38,87 @@ This template uses `gpt-35-turbo` which may not be available in all Azure region
 You can run this template virtually by using GitHub Codespaces. The button will open a web-based VS Code instance in your browser:
 
 1. Open the template (this may take several minutes)
-    [![Open in GitHub Codespaces](https://github.com/codespaces/badge.svg)](placeholder)
-2. Open a terminal window
-3. Sign into your Azure account:
-
-    ```shell
-     azd auth login --use-device-code
-    ```
-
-4. [any other steps needed for your template]
-5. Provision the Azure resources and deploy your code:
-
-    ```shell
-    azd up
-    ```
-
-6. (Add steps to start up the sample app)
+    [![Open in GitHub Codespaces](https://github.com/codespaces/badge.svg)](https://codespaces.new/Azure-Samples/signalr-ai-streaming)
+1. Open a terminal window
+1. Continue with the [Deploying steps](#deploying)
 
 ### VS Code Dev Containers
 
 A related option is VS Code Dev Containers, which will open the project in your local VS Code using the [Dev Containers extension](https://marketplace.visualstudio.com/items?itemName=ms-vscode-remote.remote-containers):
 
 1. Start Docker Desktop (install it if not already installed)
-2. Open the project:
-    [![Open in Dev Containers](https://img.shields.io/static/v1?style=for-the-badge&label=Dev%20Containers&message=Open&color=blue&logo=visualstudiocode)](placeholder)
-3. In the VS Code window that opens, once the project files show up (this may take several minutes), open a terminal window.
-4. Sign into your Azure account:
-
-    ```shell
-     azd auth login
-    ```
-
-5. [any other steps needed for your template]
-6. Provision the Azure resources and deploy your code:
-
-    ```shell
-    azd up
-    ```
-
-7. (Add steps to start up the sample app)
-
-8. Configure a CI/CD pipeline:
-
-    ```shell
-    azd pipeline config
-    ```
+1. Open the project:
+    [![Open in Dev Containers](https://img.shields.io/static/v1?style=for-the-badge&label=Dev%20Containers&message=Open&color=blue&logo=visualstudiocode)](https://vscode.dev/redirect?url=vscode://ms-vscode-remote.remote-containers/cloneInVolume?url=https://github.com/Azure-Samples/signalr-ai-streaming)
+1. In the VS Code window that opens, once the project files show up (this may take several minutes), open a terminal window.
+1. Continue with the [Deploying steps](#deploying)
 
 ### Local Environment
 
 #### Prerequisites
 
-(ideally very short, if any)
-
+* [.Net 8 SDK](https://dotnet.microsoft.com/download/dotnet/8.0)
 * Install [azd](https://aka.ms/install-azd)
   * Windows: `winget install microsoft.azd`
   * Linux: `curl -fsSL https://aka.ms/install-azd.sh | bash`
   * MacOS: `brew tap azure/azd && brew install azd`
-* OS
-* Library version
-* This template uses [MODEL 1] and [MODEL 2] which may not be available in all Azure regions. Check for [up-to-date region availability](https://learn.microsoft.com/azure/ai-services/openai/concepts/models#standard-deployment-model-availability) and select a region during deployment accordingly
-  * We recommend using [SUGGESTED REGION]
-* ...
+* [Docker Desktop](https://www.docker.com/products/docker-desktop/)
+* This template uses "gpt-4o" which may not be available in all Azure regions. Check for [up-to-date region availability](https://learn.microsoft.com/azure/ai-services/openai/concepts/models#standard-deployment-model-availability) and select a region during deployment accordingly
+  * We recommend using [East US]
 
 #### Installation
 
-(ideally very short)
+1. Download the project code:
 
-* list of any prerequisites
-* ...
+```bash
+az init -t signalr-ai-streaming
+```
 
-#### Quickstart
+1. Continue with the [Deploying steps](#deploying)
 
-(Add steps to get up and running quickly)
+### Deploying
 
-1. Bring down the template code:
+Once you've opened the project in Codespaces, in Dev Containers, or locally, you can deploy it to Azure.
 
-    ```shell
-    azd init --template [name-of-repo]
-    ```
+#### Deploying with `azd`
 
-    This will perform a git clone
+1. Login to Azure:
 
-2. Sign into your Azure account:
+```bash
+azd auth login
+```
 
-    ```shell
-     azd auth login
-    ```
+1. Provision resources and deploy the app to Azure Container App:
 
-3. [Packages or anything else that needs to be installed]
+```bash
+azd up
+```
 
-    ```shell
-    npm install ...
-    ```
+It will prompt you to provide an azd environment name (like "chat-app"), select a subscription from your Azure account, and select a location where OpenAI is available (like "eastus"). Then it will provision the resources in your account and deploy the latest code. If you get an error or timeout with deployment, changing the location can help, as there may be availability constraints for the OpenAI resource.
 
-4. ...
-5. Provision and deploy the project to Azure:
+1. When azd has finished deploying, you'll see an endpoint URI in the command output. Visit that URI, and you should see the chat app!
 
-    ```shell
-    azd up
-    ```
+1. When you've made any changes to the app code, you can just run:
 
-6. (Add steps to start up the sample app)
+```bash
+azd deploy
+```
 
-7. Configure a CI/CD pipeline:
+### Continuous deployment with GitHub Actions
 
-    ```shell
-    azd pipeline config
-    ```
+This project includes a Github workflow for deploying the resources to Azure
+on every push to main. That workflow requires several Azure-related authentication secrets
+to be stored as Github action secrets. To set that up, run:
 
-#### Local Development
-
-Describe how to run and develop the app locally
+```shell
+azd pipeline config
+```
 
 ## Guidance
 
 ### Region Availability
 
-This template uses [MODEL 1] and [MODEL 2] which may not be available in all Azure regions. Check for [up-to-date region availability](https://learn.microsoft.com/azure/ai-services/openai/concepts/models#standard-deployment-model-availability) and select a region during deployment accordingly
-  * We recommend using [SUGGESTED REGION]
+This template uses "gpt-4o" which may not be available in all Azure regions. Check for [up-to-date region availability](https://learn.microsoft.com/azure/ai-services/openai/concepts/models#standard-deployment-model-availability) and select a region during deployment accordingly
+  * We recommend using [East US]
 
 ### Costs
 
@@ -172,9 +135,4 @@ This template has either [Managed Identity](https://learn.microsoft.com/entra/id
 
 ## Resources
 
-(Any additional resources or related projects)
-
-* Link to supporting information
-* Link to similar sample
-* [Develop Python apps that use Azure AI services](https://learn.microsoft.com/azure/developer/python/azure-ai-for-python-developers)
-* ...
+* [Azure SignalR Service](https://learn.microsoft.com/azure/azure-signalr/signalr-overview)
