@@ -157,3 +157,4 @@ module aIStreaming './app/AIStreaming.bicep' = {
 }
 
 output AZURE_CONTAINER_REGISTRY_ENDPOINT string = registry.outputs.loginServer
+output SERVICE_AISTREAMING_IDENTITY_PRINCIPAL_ID string = aIStreaming.outputs.identityPrincipalId
