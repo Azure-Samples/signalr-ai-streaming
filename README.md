@@ -3,35 +3,40 @@
 [![Open in GitHub Codespaces](https://github.com/codespaces/badge.svg)](https://codespaces.new/Azure-Samples/signalr-ai-streaming)
 [![Open in Dev Containers](https://img.shields.io/static/v1?style=for-the-badge&label=Dev%20Containers&message=Open&color=blue&logo=visualstudiocode)](https://vscode.dev/redirect?url=vscode://ms-vscode-remote.remote-containers/cloneInVolume?url=https://github.com/Azure-Samples/signalr-ai-streaming)
 
-In the current landscape of digital communication, AI-powered chatbots and streaming technology have become increasingly popular. This project aims to combine these two trends into a seamless group chat application by leveraging SignalR for real-time communication and integrating Azure OpenAI. This project demonstrates SignalR group chats and Azure OpenAI integration.
+## Overview
 
-[Features](#features) • [Gettting Started](#getting-started) • [Guidance](#guidance)
+In today's digital communication landscape, the demand for AI-powered chatbots and real-time streaming technology is rapidly growing. Companies, small and large, are experimenting with how to leverage AI to streamline workflow, increase productivity and offer differientiated products and services to their customers. This project brings these trends together by integrating SignalR for real-time group chat functionality with Azure OpenAI's AI capabilities. It showcases how to create a seamless group chat experience using SignalR for real-time communication, enhanced by the intelligence of Azure OpenAI. Such experience is already available to Microsoft Teams users.
 
-![chat sample](./chat.jpg)
+![Copilot in Microsoft Teams](./group_chat_with_ai.jpg)
 
 ## Important Security Notice
 
 This template, the application code and configuration it contains, has been built to showcase Microsoft Azure specific services and tools. We strongly advise our customers not to make this code part of their production environments without implementing or enabling additional security features.  
 
+## About the project
+
+[Features](#features) • [Gettting Started](#getting-started) • [Guidance](#guidance)
+
+![chat sample](./ai-powered-group-chat.png)
+
+
 ## Features
 
 This project provides the following features:
 
-* Group streaming with Azure SignalR
-* OpenAI chatbot integration
-* Chat has full context of history conversation
+* Group chat with or without AI assistant
+* Stream to all users in a group chat using Azure SignalR service
+* Generate context-aware responses using Azure OpenAI
 
-### Architecture Diagram
+### Data flow
 
-![...Add Image]()
+![Data flow of the AI-enabled group chat app](./sequence-diagram-ai-powered-group-chat.png)
 
 ## Getting Started
 
 You have a few options for getting started with this template. The quickest way to get started is [GitHub Codespaces](#github-codespaces), since it will setup all the tools for you, but you can also [set it up locally](#local-environment). You can also use a [VS Code dev container](#vs-code-dev-containers)
 
-This template uses `gpt-4o` which may not be available in all Azure regions. Check for [up-to-date region availability](https://learn.microsoft.com/azure/ai-services/openai/concepts/models#standard-deployment-model-availability) and select a region during deployment accordingly
-
-  * We recommend using [East US]
+This template uses `gpt-4o` which may not be available in all Azure regions. Check for [up-to-date region availability](https://learn.microsoft.com/azure/ai-services/openai/concepts/models#standard-deployment-model-availability) and select a region during deployment accordingly. We recommend using [East US]
 
 ### GitHub Codespaces
 
