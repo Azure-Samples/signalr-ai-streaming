@@ -75,7 +75,7 @@ A related option is VS Code Dev Containers, which will open the project in your 
 1. Download the project code:
 
 ```bash
-az init -t signalr-ai-streaming
+azd init -t signalr-ai-streaming
 ```
 
 1. Continue with the [Deploying steps](#deploying)
