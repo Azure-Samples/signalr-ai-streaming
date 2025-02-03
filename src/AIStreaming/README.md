@@ -33,6 +33,22 @@ Endpoint=xxx;AuthType=azure
 
 And then you need to grant your user the `SignalR App Server ` role. For more connection string details, please access to [Connection String](https://learn.microsoft.com/en-us/azure/azure-signalr/concept-connection-string), and for more details about permission, please access to [Assign Azure roles for access rights](https://learn.microsoft.com/azure/azure-signalr/signalr-concept-authorize-azure-active-directory#assign-azure-roles-for-access-rights).
 
+In case you have Microsoft Defender for Cloud protection on your Azure OpenAI resource and you want to have additional user context on the alerts, please add the following section to your AIStreaming.bicep file under app.properties.template.containers[].env:
+
+    {
+        name: 'MS_DEFENDERFORCLOUD_ENABLED'
+        value: 'true'
+    }
+    
+To customize the application name of the user context, add:
+
+    {
+        name: 'APPLICATION_NAME'
+        value: 'your application name'
+    }
+
+For more details, refer to the [Microsoft Defender for Cloud documentation](https://learn.microsoft.com/azure/defender-for-cloud/gain-end-user-context-ai).
+
 
 Run the project with:
 

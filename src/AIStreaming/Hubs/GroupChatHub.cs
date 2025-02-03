@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.SignalR;
 using Microsoft.Extensions.Options;
 using OpenAI;
+using OpenAI.Chat;
 using System.Text;
 
 namespace AIStreaming.Hubs
@@ -49,7 +50,9 @@ namespace AIStreaming.Hubs
                 var chatClient = _openAI.GetChatClient(_options.Model);
                 var totalCompletion = new StringBuilder();
                 var lastSentTokenLength = 0;
-                await foreach (var completion in chatClient.CompleteChatStreamingAsync(messagesIncludeHistory))
+                var options = GetChatCompletionOptions();
+
+                await foreach (var completion in chatClient.CompleteChatStreamingAsync(messagesIncludeHistory, options))
                 {
                     foreach (var content in completion.ContentUpdate)
                     {
@@ -69,6 +72,18 @@ namespace AIStreaming.Hubs
                 _history.GetOrAddGroupHistory(groupName, userName, message);
                 await Clients.OthersInGroup(groupName).SendAsync("NewMessage", userName, message);
             }
+        }
+
+        private ChatCompletionOptions GetChatCompletionOptions(){
+            var httpContext = Context.GetHttpContext();
+            if (!MsDefenderExtension.IsMsDefenderForAIEnabled())
+            {
+                return new ChatCompletionOptions();
+            }
+            return new ChatCompletionOptions()
+            {
+                User = MsDefenderExtension.GetMsDefenderUserJson(httpContext)
+            };
         }
     }
 }

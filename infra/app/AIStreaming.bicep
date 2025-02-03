@@ -119,6 +119,10 @@ resource app 'Microsoft.App/containerApps@2023-05-02-preview' = {
               name: 'Azure__SignalR__IdentityClientId'
               value: identity.properties.clientId
             }
+            {
+              name: 'AZURE_CLIENT_ID'
+              value: identity.properties.clientId
+            }
           ],
           env,
           map(secrets, secret => {
