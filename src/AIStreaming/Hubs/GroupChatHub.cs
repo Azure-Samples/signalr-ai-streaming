@@ -75,11 +75,11 @@ namespace AIStreaming.Hubs
         }
 
         private ChatCompletionOptions GetChatCompletionOptions(){
-            var httpContext = Context.GetHttpContext();
             if (!MsDefenderExtension.IsMsDefenderForAIEnabled())
             {
                 return new ChatCompletionOptions();
             }
+            var httpContext = Context.GetHttpContext();
             return new ChatCompletionOptions()
             {
                 User = MsDefenderExtension.GetMsDefenderUserJson(httpContext)
