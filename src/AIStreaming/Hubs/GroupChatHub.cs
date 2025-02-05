@@ -75,14 +75,14 @@ namespace AIStreaming.Hubs
         }
 
         private ChatCompletionOptions GetChatCompletionOptions(){
-            if (!MsDefenderExtension.IsMsDefenderForAIEnabled())
+            var httpContext = Context.GetHttpContext();
+            if (httpContext == null || !MsDefenderExtension.IsMsDefenderForAIEnabled())
             {
                 return new ChatCompletionOptions();
             }
-            var httpContext = Context.GetHttpContext();
             return new ChatCompletionOptions()
             {
-                User = MsDefenderExtension.GetMsDefenderUserJson(httpContext)
+                User = MsDefenderExtension.GetSecurityContext(httpContext)
             };
         }
     }

@@ -5,11 +5,10 @@ public static class MsDefenderExtension
     /// <summary>
     /// Checks if Microsoft Defender for AI is enabled.
     /// </summary>
-    /// <returns>A json bool which represents if Microsoft Defender for AI is enabled</returns>
+    /// <returns>A bool which represents if Microsoft Defender for AI is enabled</returns>
     public static bool IsMsDefenderForAIEnabled()
     {
         var defenderForCloudEnabled = Environment.GetEnvironmentVariable("MS_DEFENDERFORCLOUD_ENABLED");
-        Console.WriteLine($"MS_DEFENDERFORCLOUD_ENABLED: {defenderForCloudEnabled}");
         return !string.IsNullOrEmpty(defenderForCloudEnabled) && defenderForCloudEnabled.Equals("true", StringComparison.OrdinalIgnoreCase);;
     }
 
@@ -20,10 +19,10 @@ public static class MsDefenderExtension
     /// </summary>
     /// <param name="request">The HTTP request</param>
     /// <returns>A json string which represents the user context</returns>
-    public static string GetMsDefenderUserJson(HttpContext? requestContext)
+    public static string GetSecurityContext(HttpContext requestContext)
     {
         var sourceIp = GetSourceIp(requestContext);
-        // If authentication is enabled, consider to add the keys: "EndUserTenantId", "EndUserId", "EndUserIdType"
+        // Currently this sample has no AAD auth implemented for commecting users, in case auth is added, consider passing "EndUserId" and "EndUserTenantId" after extracting it from the user auth token claims
         var userObject = new Dictionary<string, string>
         {
              { "SourceIp", sourceIp },
@@ -36,12 +35,14 @@ public static class MsDefenderExtension
 
     private static string GetSourceIp(HttpContext? requestContext)
     {
-        // If your application is NOT behind a proxy or load balancer, this function should return:
-        // httpContext.Connection.RemoteIpAddress?.ToString();
-
-        if (requestContext == null || !requestContext.Request.Headers.TryGetValue("X-Forwarded-For", out var xForwardForHeaders))
+        if (requestContext == null)
         {
             return string.Empty;
+        }
+
+        if (!requestContext.Request.Headers.TryGetValue("X-Forwarded-For", out var xForwardForHeaders))
+        {
+            return requestContext.Connection.RemoteIpAddress?.ToString() ?? string.Empty;
         }
 
         Console.WriteLine($"X-Forwarded-For: {xForwardForHeaders.FirstOrDefault()}");
