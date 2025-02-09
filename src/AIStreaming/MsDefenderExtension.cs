@@ -1,4 +1,4 @@
-//using Microsoft.Azure.Functions.Worker.Http;
+using Azure.AI.OpenAI;
 
 public static class MsDefenderExtension
 {
@@ -9,7 +9,7 @@ public static class MsDefenderExtension
     public static bool IsMsDefenderForAIEnabled()
     {
         var defenderForCloudEnabled = Environment.GetEnvironmentVariable("MS_DEFENDERFORCLOUD_ENABLED");
-        return !string.IsNullOrEmpty(defenderForCloudEnabled) && defenderForCloudEnabled.Equals("true", StringComparison.OrdinalIgnoreCase);;
+        return !string.IsNullOrEmpty(defenderForCloudEnabled) && defenderForCloudEnabled.Equals("true", StringComparison.OrdinalIgnoreCase);
     }
 
     /// <summary>
@@ -17,20 +17,20 @@ public static class MsDefenderExtension
     /// These fields assist your security operations teams to investigate and mitigate security incidents by providing a comprehensive approach to protecting your AI applications.
     /// <see href="https://learn.microsoft.com/en-us/azure/defender-for-cloud/gain-end-user-context-ai">Learn more</see> about protecting AI applications using Microsoft Defender for Cloud.
     /// </summary>
-    /// <param name="request">The HTTP request</param>
-    /// <returns>A json string which represents the user context</returns>
-    public static string GetSecurityContext(HttpContext requestContext)
+    /// <param name="request">The HTTP context</param>
+    /// <returns>UserSecurityContext which represents the user context</returns>
+    public static UserSecurityContext GetSecurityContext(HttpContext requestContext)
     {
         var sourceIp = GetSourceIp(requestContext);
         // Currently this sample has no AAD auth implemented for commecting users, in case auth is added, consider passing "EndUserId" and "EndUserTenantId" after extracting it from the user auth token claims
-        var userObject = new Dictionary<string, string>
+        var userObject = new UserSecurityContext()
         {
-             { "SourceIp", sourceIp },
-             { "ApplicationName", Environment.GetEnvironmentVariable("APPLICATION_NAME") ?? String.Empty }, // Value should be the name of your application
+            // If authentication is enabled, consider to add the keys: "EndUserTenantId", "EndUserId"
+            ApplicationName = Environment.GetEnvironmentVariable("APPLICATION_NAME") ?? String.Empty,
+            SourceIP = sourceIp,
         };
 
-        Console.WriteLine($"APPLICATION_NAME: {Environment.GetEnvironmentVariable("APPLICATION_NAME")}");
-        return System.Text.Json.JsonSerializer.Serialize(userObject);
+        return userObject;
     }
 
     private static string GetSourceIp(HttpContext? requestContext)

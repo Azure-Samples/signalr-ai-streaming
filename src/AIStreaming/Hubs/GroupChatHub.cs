@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.SignalR;
+﻿using Azure.AI.OpenAI.Chat;
+using Microsoft.AspNetCore.SignalR;
 using Microsoft.Extensions.Options;
 using OpenAI;
 using OpenAI.Chat;
@@ -74,16 +75,18 @@ namespace AIStreaming.Hubs
             }
         }
 
-        private ChatCompletionOptions GetChatCompletionOptions(){
+        private ChatCompletionOptions GetChatCompletionOptions()
+        {
             var httpContext = Context.GetHttpContext();
-            if (httpContext == null || !MsDefenderExtension.IsMsDefenderForAIEnabled())
+            var chatComplitionOptions = new ChatCompletionOptions();
+
+            if (httpContext != null && MsDefenderExtension.IsMsDefenderForAIEnabled())
             {
-                return new ChatCompletionOptions();
+                var userSecurityContext = MsDefenderExtension.GetSecurityContext(httpContext);
+                chatComplitionOptions.SetUserSecurityContext(userSecurityContext);
             }
-            return new ChatCompletionOptions()
-            {
-                User = MsDefenderExtension.GetSecurityContext(httpContext)
-            };
+
+            return chatComplitionOptions;
         }
     }
 }
