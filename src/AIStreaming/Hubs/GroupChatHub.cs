@@ -82,7 +82,7 @@ namespace AIStreaming.Hubs
 
             if (httpContext != null && MsDefenderExtension.IsMsDefenderForAIEnabled())
             {
-                var userSecurityContext = MsDefenderExtension.GetSecurityContext(httpContext);
+                var userSecurityContext = MsDefenderExtension.GetUserSecurityContext(httpContext);
                 chatComplitionOptions.SetUserSecurityContext(userSecurityContext);
             }
 

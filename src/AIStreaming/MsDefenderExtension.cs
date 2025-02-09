@@ -19,7 +19,7 @@ public static class MsDefenderExtension
     /// </summary>
     /// <param name="request">The HTTP context</param>
     /// <returns>UserSecurityContext which represents the user context</returns>
-    public static UserSecurityContext GetSecurityContext(HttpContext requestContext)
+    public static UserSecurityContext GetUserSecurityContext(HttpContext requestContext)
     {
         var sourceIp = GetSourceIp(requestContext);
         // Currently this sample has no AAD auth implemented for commecting users, in case auth is added, consider passing "EndUserId" and "EndUserTenantId" after extracting it from the user auth token claims
