@@ -36,7 +36,7 @@ public static class MsDefenderExtension
 
     private static string GetSourceIp(HttpContext requestContext)
     {
-        var remoteIp = GetRemoteIp(requestContext);
+        var remoteIp = GetClientIpAddress(requestContext);
         var ip = remoteIp.Split(',')[0];
         if (!string.IsNullOrEmpty(ip) && IPAddress.TryParse(ip, out var ipAddress))
         {
@@ -46,7 +46,7 @@ public static class MsDefenderExtension
         return ip;
     }
 
-    private static string GetRemoteIp(HttpContext requestContext)
+    private static string GetClientIpAddress(HttpContext requestContext)
     {
         // You can add more proxy headers to check for the IP address
         if (requestContext.Request.Headers.TryGetValue("X-Forwarded-For", out var xForwardForHeaders))
