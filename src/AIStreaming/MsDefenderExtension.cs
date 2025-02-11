@@ -1,12 +1,13 @@
+using System.Net;
 using Azure.AI.OpenAI;
 
 public static class MsDefenderExtension
 {
     /// <summary>
-    /// Checks if Microsoft Defender for AI is enabled.
+    /// Checks if Microsoft Defender for Cloud's threat protection for AI workloads enabled.
     /// </summary>
-    /// <returns>A bool which represents if Microsoft Defender for AI is enabled</returns>
-    public static bool IsMsDefenderForAIEnabled()
+    /// <returns>A bool which represents if Microsoft Defender for Cloud's threat protection for AI workloads enabled</returns>
+    public static bool IsMsDefenderForCloudEnabled()
     {
         var defenderForCloudEnabled = Environment.GetEnvironmentVariable("MS_DEFENDERFORCLOUD_ENABLED");
         return !string.IsNullOrEmpty(defenderForCloudEnabled) && defenderForCloudEnabled.Equals("true", StringComparison.OrdinalIgnoreCase);
@@ -33,41 +34,33 @@ public static class MsDefenderExtension
         return userObject;
     }
 
-    private static string GetSourceIp(HttpContext? requestContext)
+    private static string GetSourceIp(HttpContext requestContext)
     {
-        if (requestContext == null)
+        var remoteIp = GetRemoteIp(requestContext);
+        var ip = remoteIp.Split(',')[0];
+        if (!string.IsNullOrEmpty(ip) && IPAddress.TryParse(ip, out var ipAddress))
         {
-            return string.Empty;
-        }
-
-        if (!requestContext.Request.Headers.TryGetValue("X-Forwarded-For", out var xForwardForHeaders))
-        {
-            return requestContext.Connection.RemoteIpAddress?.ToString() ?? string.Empty;
-        }
-
-        Console.WriteLine($"X-Forwarded-For: {xForwardForHeaders.FirstOrDefault()}");
-        Console.WriteLine($"By RemoteIpAddress: {requestContext.Connection.RemoteIpAddress?.ToString()}");
-
-        var ip = xForwardForHeaders.FirstOrDefault()?.Split(',')[0];
-        if (ip == null)
-        {
-            return string.Empty;
-        }
-
-        var colonIndex = ip.LastIndexOf(':');
-
-        // case of ipv4
-        if (colonIndex != -1 && ip.IndexOf(':') == colonIndex)
-        {
-            return ip.Substring(0, colonIndex);
-        }
-
-        // case of ipv6
-        if (ip.StartsWith('[') && ip.Contains("]:"))
-        {
-            return ip.Substring(0, ip.IndexOf("]:") + 1);
+            return ipAddress.ToString();
         }
 
         return ip;
+    }
+
+    private static string GetRemoteIp(HttpContext requestContext)
+    {
+        // You can add more proxy headers to check for the IP address
+        if (requestContext.Request.Headers.TryGetValue("X-Forwarded-For", out var xForwardForHeaders))
+        {
+            return xForwardForHeaders.FirstOrDefault() ?? GetRemoteIpFromConnection(requestContext);
+        }
+        else
+        {
+            return GetRemoteIpFromConnection(requestContext);
+        }
+    }
+
+    private static string GetRemoteIpFromConnection(HttpContext requestContext)
+    {
+        return requestContext.Connection.RemoteIpAddress?.ToString() ?? string.Empty;
     }
 }

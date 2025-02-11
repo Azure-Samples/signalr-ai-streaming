@@ -57,7 +57,7 @@ namespace AIStreaming.Hubs
                 {
                     foreach (var content in completion.ContentUpdate)
                     {
-                        totalCompletion.Append(content);
+                        totalCompletion.Append(content.Text);
                         if (totalCompletion.Length - lastSentTokenLength > 20)
                         {
                             await Clients.Group(groupName).SendAsync("newMessageWithId", "AI Assistant", id, totalCompletion.ToString());
@@ -79,8 +79,7 @@ namespace AIStreaming.Hubs
         {
             var httpContext = Context.GetHttpContext();
             var chatComplitionOptions = new ChatCompletionOptions();
-
-            if (httpContext != null && MsDefenderExtension.IsMsDefenderForAIEnabled())
+            if (httpContext != null && MsDefenderExtension.IsMsDefenderForCloudEnabled())
             {
                 var userSecurityContext = MsDefenderExtension.GetUserSecurityContext(httpContext);
                 chatComplitionOptions.SetUserSecurityContext(userSecurityContext);

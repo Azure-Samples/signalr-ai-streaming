@@ -123,6 +123,14 @@ resource app 'Microsoft.App/containerApps@2023-05-02-preview' = {
               name: 'AZURE_CLIENT_ID'
               value: identity.properties.clientId
             }
+            {
+              name: 'MS_DEFENDERFORCLOUD_ENABLED'
+              value: 'false'
+            }
+            {
+              name: 'APPLICATION_NAME'
+              value: 'SignalR-AI-Streaming app'
+            }
           ],
           env,
           map(secrets, secret => {
