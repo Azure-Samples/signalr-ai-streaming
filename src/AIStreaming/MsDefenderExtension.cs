@@ -23,44 +23,39 @@ public static class MsDefenderExtension
     public static UserSecurityContext GetUserSecurityContext(HttpContext requestContext)
     {
         var sourceIp = GetSourceIp(requestContext);
-        // Currently this sample has no AAD auth implemented for commecting users, in case auth is added, consider passing "EndUserId" and "EndUserTenantId" after extracting it from the user auth token claims
-        var userObject = new UserSecurityContext()
+        // Currently this sample has no AAD auth implemented for connecting users, in case auth is added, consider passing "EndUserId" and "EndUserTenantId" after extracting it from the user auth token claims
+        var userSecurityContext = new UserSecurityContext()
         {
-            // If authentication is enabled, consider to add the keys: "EndUserTenantId", "EndUserId"
             ApplicationName = Environment.GetEnvironmentVariable("APPLICATION_NAME") ?? String.Empty,
             SourceIP = sourceIp,
         };
 
-        return userObject;
+        return userSecurityContext;
     }
 
     private static string GetSourceIp(HttpContext requestContext)
     {
-        var remoteIp = GetClientIpAddress(requestContext);
-        var ip = remoteIp.Split(',')[0];
-        if (!string.IsNullOrEmpty(ip) && IPAddress.TryParse(ip, out var ipAddress))
+        string? ipAddress = null;
+        
+        // Check if the request has passed through a proxy or load balancer
+        if (requestContext.Request.Headers.ContainsKey("X-Forwarded-For"))
         {
-            return ipAddress.ToString();
+            // The X-Forwarded-For header contains a comma-separated list of IP addresses
+            // The first IP address in the list is the original client's IP address
+            ipAddress = requestContext.Request.Headers["X-Forwarded-For"].FirstOrDefault();
         }
 
-        return ip;
-    }
-
-    private static string GetClientIpAddress(HttpContext requestContext)
-    {
-        // You can add more proxy headers to check for the IP address
-        if (requestContext.Request.Headers.TryGetValue("X-Forwarded-For", out var xForwardForHeaders))
+        if (string.IsNullOrEmpty(ipAddress))
         {
-            return xForwardForHeaders.FirstOrDefault() ?? GetRemoteIpFromConnection(requestContext);
+            // Get the IP address of the client making the request
+            ipAddress = requestContext.Connection.RemoteIpAddress?.ToString() ?? string.Empty;
         }
-        else
-        {
-            return GetRemoteIpFromConnection(requestContext);
-        }
-    }
 
-    private static string GetRemoteIpFromConnection(HttpContext requestContext)
-    {
-        return requestContext.Connection.RemoteIpAddress?.ToString() ?? string.Empty;
+        if (!string.IsNullOrEmpty(ipAddress) && IPAddress.TryParse(ipAddress, out var parsedIpAddress))
+        {
+            return parsedIpAddress.ToString();
+        }
+
+        return ipAddress;
     }
 }
