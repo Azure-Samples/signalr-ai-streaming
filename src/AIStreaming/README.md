@@ -46,6 +46,11 @@ To customize the application name of the user context, run this command:
 azd env set APPLICATION_NAME <your application name>
 ```
 
+and run again: 
+```bash
+azd up
+```
+
 For more details, refer to the [Microsoft Defender for Cloud documentation](https://learn.microsoft.com/azure/defender-for-cloud/gain-end-user-context-ai).
 
 
