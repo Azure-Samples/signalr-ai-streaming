@@ -157,7 +157,7 @@ module aIStreaming './app/AIStreaming.bicep' = {
     openaiEndpoint: openAi.outputs.endpoint
     signalrEndpoint: signalr.outputs.endpoint
     msDefenderForCloudEnabled: msDefenderForCloudEnabled
-    applicationName:applicationName
+    applicationName: applicationName
   }
   scope: rg
 }
