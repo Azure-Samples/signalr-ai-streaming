@@ -33,9 +33,9 @@ Endpoint=xxx;AuthType=azure
 
 And then you need to grant your user the `SignalR App Server ` role. For more connection string details, please access to [Connection String](https://learn.microsoft.com/en-us/azure/azure-signalr/concept-connection-string), and for more details about permission, please access to [Assign Azure roles for access rights](https://learn.microsoft.com/azure/azure-signalr/signalr-concept-authorize-azure-active-directory#assign-azure-roles-for-access-rights).
 
-In case you have Microsoft Defender for Cloud's threat protection for AI workloads enabled on your Azure OpenAI resource and you want to have additional user context on the alerts you can enable this app using the azd commands below, if you didn't yet enabled, here is the link how to start : [Microsoft Defender for Cloud documentation](https://learn.microsoft.com/azure/defender-for-cloud/gain-end-user-context-ai).
+If you have enabled Microsoft Defender for Cloud's threat protection for AI workloads on your Azure OpenAI resource and want to add user context to alerts, you can do so by using the azd commands below. If you haven't set up threat protection yet, please follow this guide: [Microsoft Defender for Cloud documentation](https://learn.microsoft.com/azure/defender-for-cloud/gain-end-user-context-ai).
 
-to have additional user context on the alerts please run:
+To add security context to your alerts, run the following command:
 
 ```bash
 azd env set MS_DEFENDERFORCLOUD_ENABLED true
