@@ -15,6 +15,12 @@
       "aIStreamingExists": {
         "value": "${SERVICE_AISTREAMING_RESOURCE_EXISTS=false}"
       },
+      "msDefenderForCloudEnabled": {
+        "value": "${MS_DEFENDERFORCLOUD_ENABLED=false}"
+      },
+      "applicationName": {
+        "value": "${APPLICATION_NAME=SignalR-AI-Streaming app}"
+      },
       "aIStreamingDefinition": {
         "value": {
           "settings": [

@@ -10,6 +10,10 @@ param environmentName string
 param location string
 
 param aIStreamingExists bool
+
+param applicationName string
+param msDefenderForCloudEnabled string
+
 @secure()
 param aIStreamingDefinition object
 
@@ -152,6 +156,8 @@ module aIStreaming './app/AIStreaming.bicep' = {
     appDefinition: aIStreamingDefinition
     openaiEndpoint: openAi.outputs.endpoint
     signalrEndpoint: signalr.outputs.endpoint
+    msDefenderForCloudEnabled: msDefenderForCloudEnabled
+    applicationName: applicationName
   }
   scope: rg
 }

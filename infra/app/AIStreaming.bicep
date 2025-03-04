@@ -9,6 +9,8 @@ param applicationInsightsName string
 param openaiEndpoint string
 param signalrEndpoint string
 param exists bool
+param applicationName string
+param msDefenderForCloudEnabled string
 @secure()
 param appDefinition object
 
@@ -118,6 +120,18 @@ resource app 'Microsoft.App/containerApps@2023-05-02-preview' = {
             {
               name: 'Azure__SignalR__IdentityClientId'
               value: identity.properties.clientId
+            }
+            {
+              name: 'AZURE_CLIENT_ID'
+              value: identity.properties.clientId
+            }
+            {
+              name: 'MS_DEFENDERFORCLOUD_ENABLED'
+              value: msDefenderForCloudEnabled
+            }
+            {
+              name: 'APPLICATION_NAME'
+              value: applicationName
             }
           ],
           env,

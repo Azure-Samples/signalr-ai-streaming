@@ -1,6 +1,8 @@
-﻿using Microsoft.AspNetCore.SignalR;
+﻿using Azure.AI.OpenAI.Chat;
+using Microsoft.AspNetCore.SignalR;
 using Microsoft.Extensions.Options;
 using OpenAI;
+using OpenAI.Chat;
 using System.Text;
 
 namespace AIStreaming.Hubs
@@ -49,11 +51,13 @@ namespace AIStreaming.Hubs
                 var chatClient = _openAI.GetChatClient(_options.Model);
                 var totalCompletion = new StringBuilder();
                 var lastSentTokenLength = 0;
-                await foreach (var completion in chatClient.CompleteChatStreamingAsync(messagesIncludeHistory))
+                var options = GetChatCompletionOptions();
+
+                await foreach (var completion in chatClient.CompleteChatStreamingAsync(messagesIncludeHistory, options))
                 {
                     foreach (var content in completion.ContentUpdate)
                     {
-                        totalCompletion.Append(content);
+                        totalCompletion.Append(content.Text);
                         if (totalCompletion.Length - lastSentTokenLength > 20)
                         {
                             await Clients.Group(groupName).SendAsync("newMessageWithId", "AI Assistant", id, totalCompletion.ToString());
@@ -69,6 +73,19 @@ namespace AIStreaming.Hubs
                 _history.GetOrAddGroupHistory(groupName, userName, message);
                 await Clients.OthersInGroup(groupName).SendAsync("NewMessage", userName, message);
             }
+        }
+
+        private ChatCompletionOptions GetChatCompletionOptions()
+        {
+            var httpContext = Context.GetHttpContext();
+            var chatComplitionOptions = new ChatCompletionOptions();
+            if (httpContext != null && MsDefenderExtension.IsMsDefenderForCloudEnabled())
+            {
+                var userSecurityContext = MsDefenderExtension.GetUserSecurityContext(httpContext);
+                chatComplitionOptions.SetUserSecurityContext(userSecurityContext);
+            }
+
+            return chatComplitionOptions;
         }
     }
 }
