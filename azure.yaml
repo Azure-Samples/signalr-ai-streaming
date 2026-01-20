@@ -2,7 +2,7 @@
 
 name: signalr-ai-streaming
 metadata:
-    template: azd-init@1.9.6
+    template: signalr-ai-streaming
 services:
     AIStreaming:
         project: src/AIStreaming
