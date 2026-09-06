@@ -19,9 +19,9 @@ jobs:
       AZURE_LOCATION: ${{ vars.AZURE_LOCATION }}
       GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4.4.0
       - id: validation
-        uses: microsoft/template-validation-action@v0.0.3
+        uses: microsoft/template-validation-action@b784c04bb3f48c72cf80567650d9eabc8cbbd03d # v0.0.3
         with:
           repositoryURL: https://github.com/Azure-Samples/signalr-ai-streaming
           branch: main
